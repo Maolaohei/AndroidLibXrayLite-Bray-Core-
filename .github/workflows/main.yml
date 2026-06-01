@@ -26,7 +26,7 @@ jobs:
       with:
         go-version-file: 'go.mod'
 
-    # 获取最新 release 对应的 commit hash
+    # 获取最新 Bray-Core release 对应的 commit hash
     - name: Get latest Bray-Core release commit
       id: bray_latest
       run: |
@@ -35,12 +35,20 @@ jobs:
         echo "commit=$COMMIT" >> $GITHUB_OUTPUT
         echo "Latest tag: $TAG, commit: $COMMIT"
 
-    # 强制更新依赖：删除旧条目，清理缓存，用 commit hash 重新添加
-    - name: Update Bray-Core to latest release commit
+    # 修复模块路径不匹配的问题
+    - name: Fix module paths and replace with fork
       run: |
-        go mod edit -droprequire github.com/Maolaohei/Bray-Core
+        # 1. 将所有源代码中的 import 路径从 Bray-Core 改为 xray-core
+        find . -name "*.go" -type f -exec sed -i 's|github.com/Maolaohei/Bray-Core|github.com/xtls/xray-core|g' {} \;
+        
+        # 2. 删除 go.mod 中旧的 require 行
+        go mod edit -droprequire github.com/Maolaohei/Bray-Core || true
+        
+        # 3. 添加 replace 指令，将 xray-core 指向 Bray-Core 的最新 commit
+        go mod edit -replace github.com/xtls/xray-core=github.com/Maolaohei/Bray-Core@${{ steps.bray_latest.outputs.commit }}
+        
+        # 4. 清理缓存并重新整理依赖
         go clean -modcache
-        go get github.com/Maolaohei/Bray-Core@${{ steps.bray_latest.outputs.commit }}
         go mod tidy
 
     - name: Install gomobile
