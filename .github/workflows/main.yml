@@ -26,6 +26,7 @@ jobs:
       with:
         go-version-file: 'go.mod'
 
+    # 获取最新 release 对应的 commit hash
     - name: Get latest Bray-Core release commit
       id: bray_latest
       run: |
@@ -34,7 +35,8 @@ jobs:
         echo "commit=$COMMIT" >> $GITHUB_OUTPUT
         echo "Latest tag: $TAG, commit: $COMMIT"
 
-    - name: Update Bray-Core to latest release commit (force)
+    # 强制更新依赖：删除旧条目，清理缓存，用 commit hash 重新添加
+    - name: Update Bray-Core to latest release commit
       run: |
         go mod edit -droprequire github.com/Maolaohei/Bray-Core
         go clean -modcache
