@@ -16,6 +16,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # ========== 新增：授予写入权限 ==========
+    permissions:
+      contents: write
+
     steps:
 
     - name: Checkout repository
@@ -91,6 +95,8 @@ jobs:
       if: github.event.inputs.release_tag != ''
       uses: svenstaro/upload-release-action@v2
       with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}   # 明确使用 GITHUB_TOKEN
         file: ./libv2ray*r
         tag: ${{ github.event.inputs.release_tag }}
         file_glob: true
+        overwrite: true                            # 如果 tag 已存在则覆盖
