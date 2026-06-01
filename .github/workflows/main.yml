@@ -26,6 +26,20 @@ jobs:
       with:
         go-version-file: 'go.mod'
 
+    # ========== 新增开始 ==========
+    - name: Get latest Bray-Core release tag
+      id: bray_latest
+      run: |
+        LATEST_TAG=$(curl -s https://api.github.com/repos/Maolaohei/Bray-Core/releases/latest | jq -r .tag_name)
+        echo "tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+        echo "Latest tag: $LATEST_TAG"
+
+    - name: Update Bray-Core to latest release
+      run: |
+        go get github.com/Maolaohei/Bray-Core@${{ steps.bray_latest.outputs.tag }}
+        go mod tidy
+    # ========== 新增结束 ==========
+
     - name: Install gomobile
       run: |
         go install golang.org/x/mobile/cmd/gomobile@latest
