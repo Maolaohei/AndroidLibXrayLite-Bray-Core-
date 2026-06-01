@@ -1,9 +1,9 @@
-module github.com/2dust/AndroidLibXrayLite
+module github.com/Maolaohei/AndroidLibXrayLite-Bray-Core
 
 go 1.26
 
 require (
-	github.com/xtls/xray-core v1.260327.1-0.20260601021109-94ffd50060f1
+	github.com/Maolaohei/Bray-Core v1.260327.1-0.20260601021109-94ffd50060f1
 	golang.org/x/mobile v0.0.0-20260529142300-ecb4cd65260a
 )
 
