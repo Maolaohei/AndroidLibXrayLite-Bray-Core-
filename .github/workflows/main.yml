@@ -34,8 +34,9 @@ jobs:
         echo "commit=$COMMIT" >> $GITHUB_OUTPUT
         echo "Latest tag: $TAG, commit: $COMMIT"
 
-    - name: Update Bray-Core to latest release commit
+    - name: Update Bray-Core to latest release commit (force)
       run: |
+        go mod edit -droprequire github.com/Maolaohei/Bray-Core
         go clean -modcache
         go get github.com/Maolaohei/Bray-Core@${{ steps.bray_latest.outputs.commit }}
         go mod tidy
