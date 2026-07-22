@@ -53,7 +53,7 @@ jobs:
         
         # 4. 清理缓存并重新整理依赖
         go clean -modcache
-        go mod tidy
+        GOSUMDB=off go mod tidy
 
     - name: Install gomobile
       run: |
@@ -80,7 +80,7 @@ jobs:
          bash gen_assets.sh download
          cp -v data/*.dat assets/
          gomobile init
-         go mod tidy
+         GOSUMDB=off go mod tidy
          gomobile bind -v -androidapi 24 -trimpath -ldflags='-s -w -buildid= -checklinkname=0' ./
  
     - name: Upload build artifacts
