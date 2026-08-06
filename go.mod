@@ -1,6 +1,6 @@
 module github.com/Maolaohei/AndroidLibXrayLite-Bray-Core
 
-go 1.26.4
+go 1.26.5
 
 require (
 	github.com/Maolaohei/Bray-Core v1.260327.1-0.20260601021109-94ffd50060f1
